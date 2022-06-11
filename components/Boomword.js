@@ -21,6 +21,9 @@ class Boomword extends HTMLElement {
     this.score = 0;
     this.lives = window.localStorage.getItem("lives");
     this.playButtonText = "Jugar";
+    this.streak = 0;
+    this.bestStreak = 0;
+    this.statsLastTry = 0;
   }
 
   static get styles() {
@@ -47,9 +50,7 @@ class Boomword extends HTMLElement {
           justify-content: center;
           display:flex;
           flex-direction: column;
-          justify-content: space-between;
           align-items: center;
-          height: max-content;
         }
 
         #wordToTry {
@@ -161,6 +162,87 @@ class Boomword extends HTMLElement {
           margin-top: 25px;
         }
 
+        #stats{
+          width: 300px;
+          align-items: center;
+        }
+
+        #statsTittle{
+          margin-bottom: 15px;
+          margin-left: auto;
+          margin-right: auto;
+          text-align: center;
+        }
+
+        #statsContainer {
+          width: 275px;
+          height: 55px;
+          align-items: center;
+          margin-left: auto;
+          margin-right: auto;
+          line-height: normal;
+          position: relative;
+        }
+
+        .statsIndivialStat {
+          text-align: center;
+          width: 65px;
+          height: 17px;
+          position: absolute;
+          top: 0px;
+        }
+
+
+        .statsIndivialContainer {
+          display: inline-block;
+          text-align: center;
+          vertical-align: middle;
+          width: 65px;
+          height: 60px;
+        }
+
+        .statsText {
+          height: 32px;
+          width: 65px;
+          text-align: center;
+          vertical-align: middle;
+          position: absolute;
+          bottom: 0px;
+          font-size: 13px;
+        }
+
+        #statsContainerKeyboard{
+          text-align: center;
+        }
+
+        #keyboard{
+          width: 380px;
+          display: none;
+        }
+
+        #statsContainerKeyboard {
+          width: 320px;
+          margin-top: 30px;
+          margin-left: auto;
+          margin-right: auto;
+          height: 80px;
+          display:
+        }
+
+        #statsKeyboard {
+          margin-top: 10px;
+          width: 320px;
+          height: 80px;
+          text-align: center;
+        }
+
+        #statsTextKeyboard {
+          width: 320px;
+          height: 10px;
+          text-align: center;
+
+        }
+
     `;
   }
 
@@ -183,6 +265,11 @@ class Boomword extends HTMLElement {
     this.divToShow.style.display = "flex";
   }
 
+  showDivRelative(div) {
+    this.divToShow = this.shadowRoot.getElementById(div);
+    this.divToShow.style.display = "relative";
+  }
+
   getTomorrowTimestamp() {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -198,6 +285,7 @@ class Boomword extends HTMLElement {
       this.hideDiv("fail");
       this.drawLives();
       this.hideDiv("playButton");
+      this.showDiv("keyboard");
     }
 
     if ((key == "Enter") && (this.playing)) {
@@ -208,6 +296,7 @@ class Boomword extends HTMLElement {
         this.hideDiv("fail");
         this.drawLives();
         this.hideDiv("playButton");
+        this.showDiv("keyboard");
       } else {
         this.winScreen();
       }
@@ -219,6 +308,7 @@ class Boomword extends HTMLElement {
       this.hideDiv("fail");
       this.drawLives();
       this.hideDiv("playButton");
+      this.showDiv("keyboard");
     }
   }
 
@@ -261,6 +351,11 @@ class Boomword extends HTMLElement {
         this.drawLives();
         this.hideDiv("playButton");
         this.hideDiv("bomb");
+        this.hideDiv("lives");
+        this.hideDiv("score");
+        this.shadowRoot.getElementById("statsTextKeyboard").innerHTML = "Último intento: " + window.localStorage.getItem("statsLastTry") + "/23";
+        this.shadowRoot.getElementById("statsKeyboard").innerHTML = window.localStorage.getItem("statsKeyboard");
+        this.showDivRelative("statsContainerKeyboard");
       }
 
       if (window.localStorage.getItem("firstTime") == null) {
@@ -301,7 +396,39 @@ class Boomword extends HTMLElement {
     }
   }
 
+  setScore() {
+
+    if (window.localStorage.getItem("win") == "YES") {
+      this.statsWinned = window.localStorage.getItem("statsWinned");
+      this.statsWinned = this.statsWinned++;
+      window.localStorage.setItem("statsWinned", this.statsWinned);
+    }
+    if (this.bestStreak >= window.localStorage.getItem("statsBestCombo")) {
+      window.localStorage.setItem("statsBestCombo", this.bestStreak);
+    }
+
+    window.localStorage.setItem("statsLastTry", this.statsLastTry);
+
+    window.localStorage.setItem("statsKeyboard", this.statsKeyboard);
+
+
+    this.statsPlayed = window.localStorage.getItem("statsPlayed");
+    this.statsPlayed++;
+    window.localStorage.setItem("statsPlayed", this.statsPlayed);
+
+    this.statsTotalWords = window.localStorage.getItem("statsTotalWords");
+    this.statsTotalWords = parseInt(this.statsTotalWords) + parseInt(this.score);
+    window.localStorage.setItem("statsTotalWords", this.statsTotalWords);
+
+
+
+
+  }
+
   timeOut() {
+    if (this.streak >= this.bestStreak) {
+      this.bestStreak = this.streak;
+    }
     this.lives = window.localStorage.getItem("lives");
     this.lives--;
     window.localStorage.setItem("lives", this.lives);
@@ -317,16 +444,46 @@ class Boomword extends HTMLElement {
       this.hideDiv("wordToTry");
     }
     if (window.localStorage.getItem("lives") == 0) {
-      this.failMsg = "Podías haber respondido:" + this.randomWord + "<br> <br> Te has quedado sin vidas.<br> <br>Intentalo de nuevo mañana.";
       window.localStorage.setItem("endedTry", "YES");
       window.localStorage.setItem("nextDay", this.getTomorrowTimestamp());
       window.localStorage.setItem("firstTime", "NO");
+      window.localStorage.setItem("win", "NO");
+      this.statsKeyboard = "";
+      KEYBOARD_INITIAL_STATE.forEach(element => this.drawKeys(element));
+      this.failMsg = "Podías haber respondido:" + this.randomWord + "<br> <br> Te has quedado sin vidas.<br> <br>Intentalo de nuevo mañana.<br> <br>" + this.statsKeyboard;
+      this.setScore();
       console.log(Date.now());
       this.render();
       this.drawLives();
       this.hideDiv("bomb");
       this.hideDiv("playButton");
       this.hideDiv("wordToTry");
+    }
+  }
+
+  drawKeys(element) {
+    if (element.state == "exact") {
+      this.statsKeyboard = this.statsKeyboard + "🟩";
+      this.statsLastTry++;
+    }
+    if ((element.state == "unusedSpecial") || (element.state == "specialMark")) {
+      this.statsKeyboard = this.statsKeyboard + "⬛";
+    }
+    if (element.state == "unused") {
+      this.statsKeyboard = this.statsKeyboard + "⬜";
+    }
+    if (element.state == "special") {
+      if (element.key == "BACK") {
+        this.statsKeyboard = this.statsKeyboard + "..⬛";
+      } else {
+        this.statsKeyboard = this.statsKeyboard + "⬛..";
+      }
+    }
+    if ((element.key == "p")) {
+      this.statsKeyboard = this.statsKeyboard + "<br>";
+    }
+    if (element.key == "ñ") {
+      this.statsKeyboard = this.statsKeyboard + "<br> ";
     }
   }
 
@@ -360,6 +517,12 @@ class Boomword extends HTMLElement {
   }
 
   winScreen() {
+    this.statsKeyboard = "";
+    KEYBOARD_INITIAL_STATE.forEach(element => this.drawKeys(element));
+
+    window.localStorage.setItem("win", "YES");
+    this.setScore();
+
     console.log("Has ganado, has acertado todas las letras.");
     this.failMsg = "Has ganado<br><br>!Enhorabuena!";
     this.hideDiv("bomb");
@@ -370,6 +533,10 @@ class Boomword extends HTMLElement {
       this.checkMsg = "Correcto!";
       clearTimeout(this.timeoutId);
       this.score++;
+      this.streak++;
+      if (this.streak >= this.bestStreak) {
+        this.bestStreak = this.streak;
+      }
 
       this.checkLetters();
 
@@ -380,13 +547,13 @@ class Boomword extends HTMLElement {
         this.startGame();
       } else {
         this.playing = false;
-        window.localStorage.setItem("win", "YES");
         window.localStorage.setItem("firstTime", "NO");
         window.localStorage.setItem("endedTry", "YES");
         window.localStorage.setItem("nextDay", this.getTomorrowTimestamp());
       }
     } else {
       this.wordToTry = "";
+      this.streak = 0;
     }
   }
 
@@ -440,26 +607,42 @@ class Boomword extends HTMLElement {
     this.hideDiv("playButton");
     this.hideDiv("fail");
     this.drawLives();
+    this.showDiv("keyboard");
   }
 
   render() {
     this.shadowRoot.innerHTML = /* html */`
     <style>${Boomword.styles}</style>
     <div class = "container">
-    <div id="lives">
-    <img class="heart" id="heart1" >
-    <img class="heart" id="heart2" >
-    <img class="heart" id="heart3" >
-    </div>
-    <div id="score">Puntuación: ${this.score}</div>
-    <div id="bomb">
-      <img class="bombIcon" src="./assets/bomb1.svg" style="width:180px; height:180px;">
-      <div id="bombText">${this.randomLetters}</div>
-    </div>
-    <div id="wordToTry"> ${this.wordToTry}</div>
-    <div id="fail">${this.failMsg}</div>
-    <div onclick="this.getRootNode().host.playButton()" id="playButton">${this.playButtonText}</div>
-    <boomword-keyboard></boomword-keyboard>
+
+      <div id="lives">
+      <img class="heart" id="heart1" >
+      <img class="heart" id="heart2" >
+      <img class="heart" id="heart3" >
+      </div>
+
+      <div id="score">Puntuación: ${this.score}</div>
+
+      <div id="bomb">
+        <img class="bombIcon" src="./assets/bomb1.svg" style="width:180px; height:180px;">
+        <div id="bombText">${this.randomLetters}</div>
+      </div>
+
+      <div id="wordToTry"> ${this.wordToTry}</div>
+
+      <div id="fail">${this.failMsg}</div>
+
+      <div id="statsContainerKeyboard">
+        <div id="statsTextKeyboard"></div>
+        <div id="statsKeyboard"></div>
+      </div>
+
+      <div onclick="this.getRootNode().host.playButton()" id="playButton">${this.playButtonText}</div>
+
+      <div id="keyboard">
+        <boomword-keyboard></boomword-keyboard>
+      </div>
+
     </div>
 
 `;

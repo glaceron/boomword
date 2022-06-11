@@ -14,6 +14,7 @@
 }
 
 @media only screen and (max-width: 480px) {
+
   .header {
     --header-width: 320px;
   }
@@ -164,8 +165,7 @@ body {
   align-items: center;
   width: var(--width-stats);
   padding: 4px 0;
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
+
 
 
 }
@@ -421,4 +421,139 @@ h1 {
   height: 28px;
   bottom: 44px;
   left: var(--text-left);
+}
+
+
+#statsContainer {
+  margin-top: 10px;
+  width: 275px;
+  height: 55px;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: normal;
+  position: relative;
+}
+
+.statsIndivialStat {
+  text-align: center;
+  width: 65px;
+  height: 17px;
+  position: absolute;
+  top: 0px;
+}
+
+
+.statsIndivialContainer {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  width: 65px;
+  height: 60px;
+}
+
+.statsText {
+  height: 32px;
+  width: 65px;
+  text-align: center;
+  vertical-align: middle;
+  position: absolute;
+  bottom: 0px;
+  font-size: 13px;
+}
+
+#statsContainerKeyboard {
+  width: 320px;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
+#statsKeyboard {
+  margin-top: 10px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#statsTextKeyboard {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#share {
+  width: 275px;
+  height: 55px;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: normal;
+  position: relative;
+}
+
+.shareText {
+  margin-top: 40px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#buttonShareContainer {
+  margin-top: 10px;
+  width: 275px;
+  height: 35px;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: normal;
+  position: relative;
+
+
+}
+
+#buttonShareWhatsapp {
+  height: 35px;
+  width: 35px;
+  display: inline-block;
+  cursor: pointer;
+  margin-left: 46px;
+  margin-right: auto;
+  content: url("./assets/whatsapp.svg");
+}
+
+#buttonShareTwitter {
+  height: 35px;
+  width: 35px;
+  display: inline-block;
+  cursor: pointer;
+  margin-left: 10px;
+  margin-right: auto;
+  content: url("./assets/twitter.svg");
+}
+
+#buttonShareTelegram {
+  height: 35px;
+  width: 35px;
+  display: inline-block;
+  cursor: pointer;
+  margin-left: 10px;
+  margin-right: auto;
+  content: url("./assets/telegram.svg");
+}
+
+#buttonCopy {
+  height: 35px;
+  width: 35px;
+  display: inline-block;
+  cursor: pointer;
+  margin-left: 10px;
+  margin-right: auto;
+  content: url("./assets/clipboard.svg");
+}
+
+
+#buttonCopy:active {
+  content: url("./assets/check.svg");
 }

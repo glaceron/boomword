@@ -23,7 +23,7 @@
     Escribe una palabra antes de que explote la bomba.<br /><br />
     Tu palabra debe incluir las letras que aparezcan dentro de la bomba:<br />
     <div id="bomb">
-      <img class="bombIcon" src="./assets/bomb1.png" style="width:180px; height:180px;">
+      <img class="bombIcon" src="./assets/bomb1.svg" style="width:180px; height:180px;">
       <div id="bombText">ÓN</div>
     </div>
     ÓNICE✅ HONDA❌ LEÓN✅<br /><br /><br />
@@ -41,11 +41,45 @@
       </div>
     </div>
     <br />
-    Estadistica 1.<br /><br />
-    Tu palabra debe incluir las letras que aparezcan dentro de la bomba, en el mismo orden y con acentos.<br /><br />
-    La bomba explotará a los 5 segundos.<br /><br />
-    Si tu palabra es válida, se reseteara el tiempo.<br /><br />
-    Tienes 3 vidas, al perderlas todas, se terminará el desafío.
+    <div id="statsContainer">
+      <div id="statsContainer1" class="statsIndivialContainer">
+        <div id="statsPlayed" class="statsIndivialStat"></div>
+        <div class="statsText">Jugadas</div>
+      </div>
+
+      <div id="statsContainer2" class="statsIndivialContainer">
+        <div id="statsWinned" class="statsIndivialStat"></div>
+        <div class="statsText">Victorias</div>
+      </div>
+
+      <div id="statsContainer3" class="statsIndivialContainer">
+        <div id="statsBestCombo" class="statsIndivialStat"></div>
+        <div class="statsText">Mejor Racha</div>
+      </div>
+
+      <div id="statsContainer4" class="statsIndivialContainer">
+        <div id="statsTotalWords" class="statsIndivialStat"></div>
+        <div class="statsText">Total Palabras</div>
+      </div>
+    </div>
+    <div id="statsContainerKeyboard">
+      <div id="statsTextKeyboard"></div>
+      <div id="statsKeyboard"></div>
+    </div>
+
+    <div id="share">
+      <div class="shareText">COMPARTIR RESULTADO</div>
+      <div id="buttonShareContainer">
+        <div id="buttonShareWhatsapp"></div>
+        <div id="buttonShareTwitter"></div>
+        <div id="buttonShareTelegram"></div>
+        <div id="buttonCopy"></div>
+      </div>
+    </div>
+
+
+
+
   </div>
 
   <div id="options">
