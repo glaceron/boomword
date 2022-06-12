@@ -9,11 +9,18 @@ if (window.localStorage.getItem("firstTime") == null) {
   window.localStorage.setItem("win", "NO");
 
   window.localStorage.setItem("statsPlayed", 0);
-  window.localStorage.setItem("statsWinned", "0%");
+  window.localStorage.setItem("statsWinned", 0);
   window.localStorage.setItem("statsBestCombo", 0);
   window.localStorage.setItem("statsTotalWords", 0);
   window.localStorage.setItem("statsLastTry", 0)
   window.localStorage.setItem("statsKeyboard", "-");
+}
+
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  document.documentElement.classList.add("dark");
+  document.getElementById("nightModeCheckBox").checked = true;
+} else {
+  document.documentElement.classList.add("light")
 }
 
 if (window.localStorage.getItem("firstTime") == "YES") {
@@ -36,7 +43,7 @@ document.getElementById("buttonShareWhatsapp").addEventListener("click", openWha
 document.getElementById("buttonShareTwitter").addEventListener("click", openTwitter);
 document.getElementById("buttonShareTelegram").addEventListener("click", openTelegram);
 document.getElementById("buttonCopy").addEventListener("click", openCopy);
-
+document.getElementById("nightModeButton").addEventListener("click", toggleDarkMode);
 
 
 function getTodayTimestamp() {
@@ -51,12 +58,15 @@ function closeInstructions() {
   document.getElementById("help").style.display = "none";
   document.getElementById("header").style.display = "flex";
   document.getElementById("container").style.display = "flex";
+
 }
 
 function openInstructions() {
   document.getElementById("header").style.display = "none";
   document.getElementById("container").style.display = "none";
   document.getElementById("help").style.display = "block";
+  document.getElementById("options").style.display = "none";
+  document.getElementById("stats").style.display = "none";
 }
 
 function closeStats() {
@@ -75,7 +85,10 @@ function openStats() {
   document.getElementById("header").style.display = "none";
   document.getElementById("container").style.display = "none";
   document.getElementById("stats").style.display = "block";
+  document.getElementById("options").style.display = "none";
+  document.getElementById("help").style.display = "none";
 }
+
 
 function closeOptions() {
   document.getElementById("options").style.display = "none";
@@ -87,6 +100,8 @@ function openOptions() {
   document.getElementById("header").style.display = "none";
   document.getElementById("container").style.display = "none";
   document.getElementById("options").style.display = "block";
+  document.getElementById("stats").style.display = "none";
+  document.getElementById("help").style.display = "none";
 }
 
 function openWhatsapp() {
@@ -132,6 +147,17 @@ function openCopy() {
   msg = msg.replace(/<br\s*[\/]?>/gi, "\n");
 
   navigator.clipboard.writeText(msg);
+  toggleDarkMode();
 
 }
 
+function toggleDarkMode() {
+
+  if (document.documentElement.classList.contains("light")) {
+    document.documentElement.classList.remove("light")
+    document.documentElement.classList.add("dark")
+  } else if (document.documentElement.classList.contains("dark")) {
+    document.documentElement.classList.remove("dark")
+    document.documentElement.classList.add("light")
+  }
+}

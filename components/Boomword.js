@@ -138,22 +138,32 @@ class Boomword extends HTMLElement {
         }
 
         #playButton {
-          background-color:rgb(23, 23, 24);
-          color: white;
-          padding: 10px;
-          vertical-align: center;
-          width: 80px;
+          background-image: linear-gradient(92.88deg, #3c9857 9.16%, #379735 43.89%, #5ba339 64.72%);
+          border-radius: 8px;
+          border-style: none;
+          box-sizing: border-box;
+          color: #FFFFFF;
+          cursor: pointer;
+          flex-shrink: 0;
+          font-size: 16px;
+          font-weight: 500;
+          height: 30px;
+          margin-top: 25px;
+          margin-left: auto;
+          margin-right: auto;
           text-align: center;
-          outline: var(--button-outline);
-          outline-offset: 2px;
-          border-radius: 4px;
-          transition: 0.3s;
-          margin-bottom: 25px;
+          padding-top: 6px;
+          text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+          transition: all .5s;
+          user-select: none;
+          -webkit-user-select: none;
+          touch-action: manipulation;
+          width: 140px;
         }
 
         #playButton:hover {
-          background-color: rgba(255, 255, 255, 0.08);
-          cursor: pointer;
+          box-shadow: rgba(117, 205, 63, 0.5) 0 1px 20px;
+  transition-duration: .1s;
         }
 
         #fail {
@@ -326,11 +336,14 @@ class Boomword extends HTMLElement {
 
   checkStart() {
     if (window.localStorage.getItem("win") == "YES") {
-      this.failMsg = "Has ganado el desafío!.<br> <br>Intentalo de nuevo mañana.";
+      this.failMsg = "¡Has ganado el desafío!<br> <br>Intentalo de nuevo mañana.";
       this.render();
       this.drawLives();
       this.hideDiv("playButton");
       this.hideDiv("bomb");
+      this.hideDiv("lives");
+      this.hideDiv("score");
+      this.openStats();
     } else {
       if (window.localStorage.getItem("lives") == 3) {
         this.hideDiv("lives");
@@ -353,9 +366,7 @@ class Boomword extends HTMLElement {
         this.hideDiv("bomb");
         this.hideDiv("lives");
         this.hideDiv("score");
-        this.shadowRoot.getElementById("statsTextKeyboard").innerHTML = "Último intento: " + window.localStorage.getItem("statsLastTry") + "/23";
-        this.shadowRoot.getElementById("statsKeyboard").innerHTML = window.localStorage.getItem("statsKeyboard");
-        this.showDivRelative("statsContainerKeyboard");
+        this.openStats();
       }
 
       if (window.localStorage.getItem("firstTime") == null) {
@@ -397,15 +408,6 @@ class Boomword extends HTMLElement {
   }
 
   setScore() {
-
-    if (window.localStorage.getItem("win") == "YES") {
-      this.statsWinned = window.localStorage.getItem("statsWinned");
-      this.statsWinned = this.statsWinned++;
-      window.localStorage.setItem("statsWinned", this.statsWinned);
-    }
-    if (this.bestStreak >= window.localStorage.getItem("statsBestCombo")) {
-      window.localStorage.setItem("statsBestCombo", this.bestStreak);
-    }
 
     window.localStorage.setItem("statsLastTry", this.statsLastTry);
 
@@ -458,6 +460,7 @@ class Boomword extends HTMLElement {
       this.hideDiv("bomb");
       this.hideDiv("playButton");
       this.hideDiv("wordToTry");
+      this.openStats();
     }
   }
 
@@ -521,11 +524,16 @@ class Boomword extends HTMLElement {
     KEYBOARD_INITIAL_STATE.forEach(element => this.drawKeys(element));
 
     window.localStorage.setItem("win", "YES");
+    this.statsWinned = window.localStorage.getItem("statsWinned");
+    this.statsWinned++;
+    window.localStorage.setItem("statsWinned", this.statsWinned);
     this.setScore();
 
     console.log("Has ganado, has acertado todas las letras.");
-    this.failMsg = "Has ganado<br><br>!Enhorabuena!";
+    this.failMsg = "Has ganado el desafío diario<br><br>!Enhorabuena!";
+    this.hideDiv("keyboard");
     this.hideDiv("bomb");
+    this.openStats();
   }
 
   check() {
@@ -536,6 +544,10 @@ class Boomword extends HTMLElement {
       this.streak++;
       if (this.streak >= this.bestStreak) {
         this.bestStreak = this.streak;
+      }
+
+      if (this.bestStreak >= window.localStorage.getItem("statsBestCombo")) {
+        window.localStorage.setItem("statsBestCombo", this.bestStreak);
       }
 
       this.checkLetters();
@@ -589,7 +601,7 @@ class Boomword extends HTMLElement {
     const randomIndex = Math.floor(Math.random() * WORDS.length);
     this.randomWord = WORDS[randomIndex];
 
-    this.timeoutId = setTimeout(() => { this.timeOut(); }, 9000);
+    this.timeoutId = setTimeout(() => { this.timeOut(); }, 8000);
 
     this.getLetters(this.randomWord);
 
@@ -610,15 +622,26 @@ class Boomword extends HTMLElement {
     this.showDiv("keyboard");
   }
 
+  openStats() {
+    document.getElementById("stats").style.display = "block";
+    document.getElementById("statsPlayed").textContent = window.localStorage.getItem("statsPlayed");
+    document.getElementById("statsWinned").textContent = window.localStorage.getItem("statsWinned");
+    document.getElementById("statsBestCombo").textContent = window.localStorage.getItem("statsBestCombo");
+    document.getElementById("statsTotalWords").textContent = window.localStorage.getItem("statsTotalWords");
+    document.getElementById("statsTextKeyboard").innerHTML = "Último intento: " + window.localStorage.getItem("statsLastTry") + "/23";
+    document.getElementById("statsKeyboard").innerHTML = window.localStorage.getItem("statsKeyboard");
+    document.getElementById("stats").style.display = "block";
+  }
+
   render() {
     this.shadowRoot.innerHTML = /* html */`
     <style>${Boomword.styles}</style>
     <div class = "container">
 
       <div id="lives">
-      <img class="heart" id="heart1" >
-      <img class="heart" id="heart2" >
-      <img class="heart" id="heart3" >
+        <img class="heart" id="heart1" >
+        <img class="heart" id="heart2" >
+        <img class="heart" id="heart3" >
       </div>
 
       <div id="score">Puntuación: ${this.score}</div>
@@ -632,10 +655,7 @@ class Boomword extends HTMLElement {
 
       <div id="fail">${this.failMsg}</div>
 
-      <div id="statsContainerKeyboard">
-        <div id="statsTextKeyboard"></div>
-        <div id="statsKeyboard"></div>
-      </div>
+
 
       <div onclick="this.getRootNode().host.playButton()" id="playButton">${this.playButtonText}</div>
 

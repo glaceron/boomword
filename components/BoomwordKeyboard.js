@@ -1,4 +1,4 @@
-import KEYBOARD_INITIAL_STATE from "../assets/keyboardState.json" assert {type: "json"};
+import KEYBOARD_INITIAL_STATE from "../assets/keyboardState.json";
 
 class BoomwordKeyboard extends HTMLElement {
   constructor() {
