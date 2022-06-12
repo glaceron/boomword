@@ -589,7 +589,7 @@ class Boomword extends HTMLElement {
     const randomIndex = Math.floor(Math.random() * WORDS.length);
     this.randomWord = WORDS[randomIndex];
 
-    this.timeoutId = setTimeout(() => { this.timeOut(); }, 7000);
+    this.timeoutId = setTimeout(() => { this.timeOut(); }, 9000);
 
     this.getLetters(this.randomWord);
 
