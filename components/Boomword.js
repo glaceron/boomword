@@ -452,7 +452,7 @@ class Boomword extends HTMLElement {
       window.localStorage.setItem("win", "NO");
       this.statsKeyboard = "";
       KEYBOARD_INITIAL_STATE.forEach(element => this.drawKeys(element));
-      this.failMsg = "Podías haber respondido:" + this.randomWord + "<br> <br> Te has quedado sin vidas.<br> <br>Intentalo de nuevo mañana.<br> <br>" + this.statsKeyboard;
+      this.failMsg = "Podías haber respondido:" + this.randomWord + "<br> <br> Te has quedado sin vidas.<br>Intentalo de nuevo mañana.";
       this.setScore();
       console.log(Date.now());
       this.render();
