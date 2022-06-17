@@ -1,5 +1,5 @@
 /* eslint-disable prefer-regex-literals */
-import WORDS from "../assets/listado_palabras.json" assert {type: "json"};
+import WORDS from "../assets/words.json" assert {type: "json"};
 import KEYBOARD_INITIAL_STATE from "../assets/keyboardState.json" assert {type: "json"};
 import "./BoomwordKeyboard.js";
 
