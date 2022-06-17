@@ -1,5 +1,5 @@
 :root.light {
-  --background-color: rgb(255, 255, 255);
+  --background-color: rgb(254, 254, 254);
   --text-color: #121213;
   --big-text-color: rgb(24, 24, 24);
 }
@@ -117,6 +117,7 @@
   font-family: Monserrat, sans-serif;
   touch-action: pan-x pan-y;
   height: 100%;
+  --exact-color: green;
 }
 
 body {
@@ -178,10 +179,6 @@ body {
   align-items: center;
   width: var(--width-options);
   padding: 4px 0;
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
-
-
 }
 
 .container {
@@ -254,8 +251,37 @@ h1 {
 
 }
 
+#playButton {
+  background-image: linear-gradient(92.88deg, #266bf5 9.16%, #2a9cf2 43.89%, #4ea8f7 64.72%);
+  border-radius: 8px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-size: 16px;
+  font-weight: 500;
+  height: 30px;
+  margin-top: 25px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding-top: 6px;
+  text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+  transition: all .5s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 140px;
+}
 
-.button2 {
+#playButton:hover {
+  box-shadow: rgba(31, 99, 218, 0.5) 0 1px 20px;
+  transition-duration: .1s;
+}
+
+
+#buttonCloseInstructions2 {
   background-image: linear-gradient(92.88deg, #3c9857 9.16%, #379735 43.89%, #5ba339 64.72%);
   border-radius: 8px;
   border-style: none;
@@ -279,7 +305,7 @@ h1 {
   width: 140px;
 }
 
-.button2:hover {
+#buttonCloseInstructions2:hover {
   box-shadow: rgba(117, 205, 63, 0.5) 0 1px 20px;
   transition-duration: .1s;
 }
@@ -618,13 +644,14 @@ input:checked+.slider:before {
 
 #optionsCointainer {
   margin-top: 10px;
-  width: 340px;
+  width: 320px;
   height: 55px;
   align-items: center;
   margin-left: auto;
   margin-right: auto;
   line-height: normal;
   position: relative;
+
 }
 
 .mode {
@@ -642,7 +669,73 @@ input:checked+.slider:before {
 #contact {
   position: relative;
   width: 320px;
-  margin-top: 200px;
+  margin-top: 145px;
   margin-left: auto;
   margin-right: auto;
+  border-top-width: 1px;
+  border-top-style: solid;
+}
+
+#contactTittle {
+  text-align: center;
+  color: var(--big-text-color);
+  font-size: 17px;
+  margin-top: 25px;
+
+}
+
+
+#contact {
+  text-align: center;
+  text-decoration: none;
+  margin-bottom: 20px;
+}
+
+.contactLink {
+  color: rgb(0, 94, 255);
+  margin-left: 10px;
+  margin-right: 10px;
+  font-size: 14px;
+  text-decoration-thickness: 1px;
+}
+
+.contactLink:visited {
+  color: rgb(0, 94, 255);
+}
+
+#contactContainer {
+  display: inline-flex;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.contactLink {
+  height: 25px;
+  margin-right: 0px;
+  display: inline-block;
+}
+
+.contactItemDiv {
+  margin: 5px;
+}
+
+#emailIcon {
+  height: 20px;
+  width: 20px;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+#twitterIcon {
+  height: 20px;
+  width: 20px;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+#githubIcon {
+  height: 20px;
+  width: 20px;
+  display: inline-flex;
+  vertical-align: middle;
 }

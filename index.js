@@ -7,6 +7,7 @@ if (window.localStorage.getItem("firstTime") == null) {
   window.localStorage.setItem("firstTime", "YES");
   window.localStorage.setItem("lives", 3);
   window.localStorage.setItem("win", "NO");
+  window.localStorage.setItem("daltonismMode", "NO");
 
   window.localStorage.setItem("statsPlayed", 0);
   window.localStorage.setItem("statsWinned", 0);
@@ -14,6 +15,8 @@ if (window.localStorage.getItem("firstTime") == null) {
   window.localStorage.setItem("statsTotalWords", 0);
   window.localStorage.setItem("statsLastTry", 0)
   window.localStorage.setItem("statsKeyboard", "-");
+
+
 }
 
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -22,6 +25,12 @@ if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').match
 } else {
   document.documentElement.classList.add("light")
 }
+
+if (window.localStorage.getItem("daltonismMode") == "YES") {
+  document.getElementById("buttonCloseInstructions2").style.backgroundImage = "linear-gradient(92.88deg, #da8f33 9.16%, #f5ae1f 43.89%, #f6c12d 64.72%)";
+  document.getElementById("daltonismModeCheckBox").checked = true;
+};
+
 
 if (window.localStorage.getItem("firstTime") == "YES") {
   openInstructions();
@@ -44,6 +53,7 @@ document.getElementById("buttonShareTwitter").addEventListener("click", openTwit
 document.getElementById("buttonShareTelegram").addEventListener("click", openTelegram);
 document.getElementById("buttonCopy").addEventListener("click", openCopy);
 document.getElementById("nightModeButton").addEventListener("click", toggleDarkMode);
+document.getElementById("daltonismModeButton").addEventListener("click", toggleDaltonismMode);
 
 
 function getTodayTimestamp() {
@@ -152,12 +162,32 @@ function openCopy() {
 }
 
 function toggleDarkMode() {
-
   if (document.documentElement.classList.contains("light")) {
-    document.documentElement.classList.remove("light")
-    document.documentElement.classList.add("dark")
+    document.documentElement.classList.remove("light");
+    document.documentElement.classList.add("dark");
   } else if (document.documentElement.classList.contains("dark")) {
-    document.documentElement.classList.remove("dark")
-    document.documentElement.classList.add("light")
+    document.documentElement.classList.remove("dark");
+    document.documentElement.classList.add("light");
   }
+}
+
+function toggleDaltonismMode() {
+  var r = document.querySelector(':root');
+  var rs = getComputedStyle(r);
+  var str = window.localStorage.getItem("statsKeyboard");
+
+  if (window.localStorage.getItem("daltonismMode") == "YES") {
+    r.style.setProperty('--exact-color', 'green');
+    str = str.replace(/🟧/g, "🟩");
+    window.localStorage.setItem("daltonismMode", "NO");
+    document.getElementById("buttonCloseInstructions2").style.backgroundImage = "linear-gradient(92.88deg, #3c9857 9.16%, #379735 43.89%, #5ba339 64.72%)";
+
+  } else {
+
+    r.style.setProperty('--exact-color', 'orange');
+    str = str.replace(/🟩/g, "🟧");
+    window.localStorage.setItem("daltonismMode", "YES");
+    document.getElementById("buttonCloseInstructions2").style.backgroundImage = "linear-gradient(92.88deg, #da8f33 9.16%, #f5ae1f 43.89%, #f6c12d 64.72%)";
+  }
+  window.localStorage.setItem("statsKeyboard", str);
 }

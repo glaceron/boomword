@@ -7,6 +7,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Boomword</title>
+  <link rel="icon"
+    href="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/313/bomb_1f4a3.png">
   <link rel="stylesheet" href="./index.css">
   <script type="module" src="./index.js"></script>
 </head>
@@ -49,7 +51,7 @@
     La bomba explotará a los 8 segundos.<br /><br />
     Introduce palabras hasta que hayas usado todas las letras desbloqueadas para ganar.<br /><br />
     Tienes 3 vidas, al perderlas todas, se terminará el desafío.
-    <div id="buttonCloseInstructions2" class="button2">!Entendido!</div>
+    <div id="buttonCloseInstructions2" class="button2">¡Entendido!</div>
   </div>
 
   <div id="stats">
@@ -133,19 +135,28 @@
       </div>
 
     </div>
-    <div id="contact">email || Twitter || Github</div>
+    <div id="contact">
+      <div id="contactTittle">Contacto<br><br></div>
+      <div id="contactContainer">
+        <div class="contactItemDiv">
+          <a class="contactLink" href="mailto:carlos.m.1997@hotmail.com">Email</a>
+          <img id="emailIcon" src="./assets/email.svg" />
+        </div>
+        <div class="contactItemDiv">
+          <a class="contactLink" href="https://twitter.com/Mr_Glaceron">Twitter</a>
+          <img id="twitterIcon" src="./assets/twitter.svg" />
+        </div>
+        <div class="contactItemDiv">
+          <a class="contactLink" href="https://github.com/glaceron">Github</a>
+          <img id="githubIcon" src="./assets/github.svg" />
+        </div>
+      </div>
+    </div>
   </div>
 
   <div id="container" class="container">
-
     <boomword-game></boomword-game>
-
-
   </div>
-
-
-
-
 </body>
 
 </html>
