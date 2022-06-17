@@ -1,4 +1,4 @@
-import KEYBOARD_INITIAL_STATE from "../assets/keyboardState.json" assert {type: "json"};
+import KEYBOARD_INITIAL_STATE from "../assets/keyboardState.json";
 
 class BoomwordKeyboard extends HTMLElement {
   constructor() {
@@ -12,7 +12,6 @@ class BoomwordKeyboard extends HTMLElement {
       :host {
         position: fixed;
         bottom: 0;
-        --exact-color: Green;
         --unused-color: darkgrey;
         --blocked-color: rgb(115, 115, 115);
       }
