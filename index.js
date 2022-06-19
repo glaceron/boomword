@@ -8,6 +8,7 @@ if (window.localStorage.getItem("firstTime") == null) {
   window.localStorage.setItem("lives", 3);
   window.localStorage.setItem("win", "NO");
   window.localStorage.setItem("daltonismMode", "NO");
+  window.localStorage.setItem("language", "SPANISH");
 
   window.localStorage.setItem("statsPlayed", 0);
   window.localStorage.setItem("statsWinned", 0);
@@ -15,6 +16,7 @@ if (window.localStorage.getItem("firstTime") == null) {
   window.localStorage.setItem("statsTotalWords", 0);
   window.localStorage.setItem("statsLastTry", 0)
   window.localStorage.setItem("statsKeyboard", "-");
+
 
 
 }
@@ -29,7 +31,13 @@ if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').match
 if (window.localStorage.getItem("daltonismMode") == "YES") {
   document.getElementById("buttonCloseInstructions2").style.backgroundImage = "linear-gradient(92.88deg, #da8f33 9.16%, #f5ae1f 43.89%, #f6c12d 64.72%)";
   document.getElementById("daltonismModeCheckBox").checked = true;
-};
+}
+
+if (window.localStorage.getItem("language") == "ENGLISH") {
+  document.getElementById("languageModeCheckBox").checked = true;
+} else {
+  document.getElementById("languageModeCheckBox").checked = false;
+}
 
 
 if (window.localStorage.getItem("firstTime") == "YES") {
@@ -54,6 +62,7 @@ document.getElementById("buttonShareTelegram").addEventListener("click", openTel
 document.getElementById("buttonCopy").addEventListener("click", openCopy);
 document.getElementById("nightModeButton").addEventListener("click", toggleDarkMode);
 document.getElementById("daltonismModeButton").addEventListener("click", toggleDaltonismMode);
+document.getElementById("languageModeButton").addEventListener("click", toggleLanguage);
 
 
 function getTodayTimestamp() {
@@ -123,10 +132,8 @@ function openWhatsapp() {
 
   if (window.matchMedia("(min-width: 700px)").matches) {
     url = "https://web.whatsapp.com/send?text=" + msg;
-    console.log("se envia por web");
   } else {
     url = "whatsapp://send?text=" + msg;
-    console.log("se envia por movil");
   }
 
   window.open(url, "_blank", strWindowFeatures);
@@ -157,7 +164,6 @@ function openCopy() {
   msg = msg.replace(/<br\s*[\/]?>/gi, "\n");
 
   navigator.clipboard.writeText(msg);
-  toggleDarkMode();
 
 }
 
@@ -191,3 +197,12 @@ function toggleDaltonismMode() {
   }
   window.localStorage.setItem("statsKeyboard", str);
 }
+
+function toggleLanguage() {
+  if (window.localStorage.getItem("language") == "SPANISH") {
+    window.localStorage.setItem("language", "ENGLISH");
+  } else {
+    window.localStorage.setItem("language", "SPANISH");
+  }
+}
+
