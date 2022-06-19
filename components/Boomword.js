@@ -1,5 +1,6 @@
 /* eslint-disable prefer-regex-literals */
 import WORDS from "../assets/words.json" assert {type: "json"};
+import ENGLISH_WORDS from "../assets/englishWords.json" assert {type: "json"};
 import KEYBOARD_INITIAL_STATE from "../assets/keyboardState.json" assert {type: "json"};
 import "./BoomwordKeyboard.js";
 
@@ -500,13 +501,24 @@ class Boomword extends HTMLElement {
   }
 
   paintKey(letter) {
-    if ((letter == "á") || (letter == "é") || (letter == "í") || (letter == "ó") || (letter == "ú")) {
-      this.keyboardSetLetter(letter, "exactMark");
-    } else if ((letter == "x") || (letter == "k") || (letter == "y") || (letter == "w")) {
-      this.keyboardSetLetter(letter, "specialMark");
+    if (window.localStorage.getItem("language") == "SPANISH") {
+      if ((letter == "á") || (letter == "é") || (letter == "í") || (letter == "ó") || (letter == "ú")) {
+        this.keyboardSetLetter(letter, "exactMark");
+      } else if ((letter == "x") || (letter == "k") || (letter == "y") || (letter == "w")) {
+        this.keyboardSetLetter(letter, "specialMark");
+      } else {
+        this.keyboardSetLetter(letter, "exact");
+      }
     } else {
-      this.keyboardSetLetter(letter, "exact");
+      if ((letter == "á") || (letter == "é") || (letter == "í") || (letter == "ó") || (letter == "ú")) {
+        this.keyboardSetLetter(letter, "exactMark");
+      } else if ((letter == "ñ") || (letter == "z")) {
+        this.keyboardSetLetter(letter, "specialMark");
+      } else {
+        this.keyboardSetLetter(letter, "exact");
+      }
     }
+
   }
 
   checkLetters() {
@@ -546,40 +558,75 @@ class Boomword extends HTMLElement {
     this.hideDiv("lives");
     this.hideDiv("wordToTry");
     this.hideDiv("score");
+    this.hideDiv("playButton");
     this.openStats();
   }
 
   check() {
-    if (WORDS.includes(this.wordToTry) && (this.wordToTry.includes(this.randomLetters))) {
-      this.checkMsg = "Correcto!";
-      clearTimeout(this.timeoutId);
-      this.score++;
-      this.streak++;
-      if (this.streak >= this.bestStreak) {
-        this.bestStreak = this.streak;
-      }
+    if (window.localStorage.getItem("language") == "SPANISH") {
+      if (WORDS.includes(this.wordToTry) && (this.wordToTry.includes(this.randomLetters))) {
+        this.checkMsg = "Correcto!";
+        clearTimeout(this.timeoutId);
+        this.score++;
+        this.streak++;
+        if (this.streak >= this.bestStreak) {
+          this.bestStreak = this.streak;
+        }
 
-      if (this.bestStreak >= window.localStorage.getItem("statsBestCombo")) {
-        window.localStorage.setItem("statsBestCombo", this.bestStreak);
-      }
+        if (this.bestStreak >= window.localStorage.getItem("statsBestCombo")) {
+          window.localStorage.setItem("statsBestCombo", this.bestStreak);
+        }
 
-      this.checkLetters();
+        this.checkLetters();
 
-      this.win = true;
-      KEYBOARD_INITIAL_STATE.forEach(element => this.checkWin(element.state));
+        this.win = true;
+        KEYBOARD_INITIAL_STATE.forEach(element => this.checkWin(element.state));
 
-      if (this.win == false) {
-        this.startGame();
+        if (this.win == false) {
+          this.startGame();
+        } else {
+          this.playing = false;
+          window.localStorage.setItem("firstTime", "NO");
+          window.localStorage.setItem("endedTry", "YES");
+          window.localStorage.setItem("nextDay", this.getTomorrowTimestamp());
+        }
       } else {
-        this.playing = false;
-        window.localStorage.setItem("firstTime", "NO");
-        window.localStorage.setItem("endedTry", "YES");
-        window.localStorage.setItem("nextDay", this.getTomorrowTimestamp());
+        this.wordToTry = "";
+        this.streak = 0;
       }
     } else {
-      this.wordToTry = "";
-      this.streak = 0;
+      if (ENGLISH_WORDS.includes(this.wordToTry) && (this.wordToTry.includes(this.randomLetters))) {
+        this.checkMsg = "Correcto!";
+        clearTimeout(this.timeoutId);
+        this.score++;
+        this.streak++;
+        if (this.streak >= this.bestStreak) {
+          this.bestStreak = this.streak;
+        }
+
+        if (this.bestStreak >= window.localStorage.getItem("statsBestCombo")) {
+          window.localStorage.setItem("statsBestCombo", this.bestStreak);
+        }
+
+        this.checkLetters();
+
+        this.win = true;
+        KEYBOARD_INITIAL_STATE.forEach(element => this.checkWin(element.state));
+
+        if (this.win == false) {
+          this.startGame();
+        } else {
+          this.playing = false;
+          window.localStorage.setItem("firstTime", "NO");
+          window.localStorage.setItem("endedTry", "YES");
+          window.localStorage.setItem("nextDay", this.getTomorrowTimestamp());
+        }
+      } else {
+        this.wordToTry = "";
+        this.streak = 0;
+      }
     }
+
   }
 
   getLetters(word) {
@@ -587,14 +634,13 @@ class Boomword extends HTMLElement {
 
     if (this.randomTwoOrThree == 2) {
       var randomCharAt = Math.floor(Math.random() * (word.length - 1));
-      console.log(word.substring((randomCharAt), (randomCharAt + 2)));
       return word.substring((randomCharAt), (randomCharAt + 2));
     } else {
       var randomCharAt = Math.floor(Math.random() * (word.length - 2));
-      console.log(word.substring((randomCharAt), (randomCharAt + 3)));
       return word.substring((randomCharAt), (randomCharAt + 3));
     }
   }
+
 
   playButton() {
     if (window.localStorage.getItem("lives") > 0) {
@@ -611,9 +657,13 @@ class Boomword extends HTMLElement {
 
   startGame() {
     this.playing = true;
-    const randomIndex = Math.floor(Math.random() * WORDS.length);
-    this.randomWord = WORDS[randomIndex];
-
+    if (window.localStorage.getItem("language") == "SPANISH") {
+      const randomIndex = Math.floor(Math.random() * WORDS.length);
+      this.randomWord = WORDS[randomIndex];
+    } else {
+      const randomIndex = Math.floor(Math.random() * ENGLISH_WORDS.length);
+      this.randomWord = ENGLISH_WORDS[randomIndex];
+    }
     this.timeoutId = setTimeout(() => { this.timeOut(); }, 8000);
 
     this.getLetters(this.randomWord);
